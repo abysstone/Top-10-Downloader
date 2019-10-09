@@ -24,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
     private int feedLimit = 10;
 
+    private String feedCachedUrl = "INVALIDATED";
+    public static final String STATE_URL = "feedUrl";
+    public static final String STATE_LIMIT = "feedLimit";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onOptionsItemSelected: " + item.getTitle() + " feedlimit unchanged ");
                 }
                 break;
+            case R.id.mnuRefresh:
+                feedCachedUrl = "INVALIDATED";
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -79,11 +86,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadUrl(String feedUrl){
-        Log.d(TAG, "downloadUrl: starting Asynctask");
-        DownloadData downloadData = new DownloadData();
-        downloadData.execute(feedUrl);
-        Log.d(TAG, "downloadUrl: done");
-
+        if (!feedUrl.equalsIgnoreCase(feedCachedUrl)){
+            Log.d(TAG, "downloadUrl: starting Asynctask");
+            DownloadData downloadData = new DownloadData();
+            downloadData.execute(feedUrl);
+            feedCachedUrl = feedUrl;
+            Log.d(TAG, "downloadUrl: done");
+        }else {
+            Log.d(TAG, "downloadUrl: URL not changed");
+        }
     }
 
     private class DownloadData extends AsyncTask<String, Void, String> {
