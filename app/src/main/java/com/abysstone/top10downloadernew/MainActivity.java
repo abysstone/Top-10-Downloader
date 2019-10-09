@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         listApps=(ListView) findViewById(R.id.xmlListView);
 
+        if (savedInstanceState != null){
+            feedUrl = savedInstanceState.getString(STATE_URL);
+            feedLimit = savedInstanceState.getInt(STATE_LIMIT);
+        }
+
 //        downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
 
         downloadUrl(String.format(feedUrl,feedLimit));
@@ -83,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
         }
         downloadUrl(String.format(feedUrl,feedLimit));
         return true;
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(STATE_URL, feedUrl);
+        outState.putInt(STATE_LIMIT,feedLimit);
+        super.onSaveInstanceState(outState);
     }
 
     private void downloadUrl(String feedUrl){
