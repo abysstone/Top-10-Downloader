@@ -38,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.feed_menu,menu);
+        if(feedLimit == 10){
+            menu.findItem(R.id.mnu10).setChecked(true);
+        }else {
+            menu.findItem(R.id.mnu25).setChecked(true);
+        }
         return true;
     }
 
@@ -63,8 +68,9 @@ public class MainActivity extends AppCompatActivity {
                     feedLimit = 35 - feedLimit;
                     Log.d(TAG, "onOptionsItemSelected: "+ item.getTitle() + " setting feedLimit to " + feedLimit);
                 }else {
-                    Log.d(TAG, "onOptionsItemSelected: " + item.getTitle() + " setting feedLimit to " + feedLimit);
+                    Log.d(TAG, "onOptionsItemSelected: " + item.getTitle() + " feedlimit unchanged ");
                 }
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
